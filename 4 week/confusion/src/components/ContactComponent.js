@@ -1,9 +1,7 @@
-/* eslint-disable react/jsx-pascal-case */
 import React, { Component } from "react";
-import { Breadcrumb, BreadcrumbItem, Button, Row, Col, Label } from "reactstrap";
-import { Control, Form, Errors, actions, LocalForm } from "react-redux-form";
-
+import { Breadcrumb, BreadcrumbItem, Button, Label, Col, Row } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Control, Form, Errors, actions } from "react-redux-form";
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
@@ -15,73 +13,17 @@ class Contact extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			firstname: "",
-			lastname: "",
-			telnum: "",
-			email: "",
-			agree: false,
-			contactType: "Tel.",
-			message: "",
-			touched: {
-				firstname: false,
-				lastname: false,
-				telnum: false,
-				email: false,
-			},
-		};
 		this.handleSubmit = this.handleSubmit.bind(this);
-		this.handleInputChange = this.handleInputChange.bind(this);
-		this.handleBlur = this.handleBlur.bind(this);
-	}
-
-	handleInputChange(event) {
-		const target = event.target;
-		const value = target.type === "checkbox" ? target.checked : target.value;
-		const name = target.name;
-
-		this.setState({
-			[name]: value,
-		});
 	}
 
 	handleSubmit(values) {
-		console.log("Current State is: " + JSON.stringify(values));
-		alert("Current State is: " + JSON.stringify(values));
+		console.log("Thank you for feedback! " + JSON.stringify(values));
+		alert("Thank you for feedback! " + JSON.stringify(values));
+		this.props.postFeedback(values);
 		this.props.resetFeedbackForm();
-		// event.preventDefault();
-	}
-
-	handleBlur = (field) => (evt) => {
-		this.setState({
-			touched: { ...this.state.touched, [field]: true },
-		});
-	};
-
-	validate(firstname, lastname, telnum, email) {
-		const errors = {
-			firstname: "",
-			lastname: "",
-			telnum: "",
-			email: "",
-		};
-
-		if (this.state.touched.firstname && firstname.length < 3) errors.firstname = "First Name should be >= 3 characters";
-		else if (this.state.touched.firstname && firstname.length > 10) errors.firstname = "First Name should be <= 10 characters";
-
-		if (this.state.touched.lastname && lastname.length < 3) errors.lastname = "Last Name should be >= 3 characters";
-		else if (this.state.touched.lastname && lastname.length > 10) errors.lastname = "Last Name should be <= 10 characters";
-
-		const reg = /^\d+$/;
-		if (this.state.touched.telnum && !reg.test(telnum)) errors.telnum = "Tel. Number should contain only numbers";
-
-		if (this.state.touched.email && email.split("").filter((x) => x === "@").length !== 1) errors.email = "Email should contain a @";
-
-		return errors;
 	}
 
 	render() {
-		const errors = this.validate(this.state.firstname, this.state.lastname, this.state.telnum, this.state.email);
 		return (
 			<div className="container">
 				<div className="row">
@@ -124,7 +66,7 @@ class Contact extends Component {
 							<a role="button" className="btn btn-primary" href="tel:+85212345678">
 								<i className="fa fa-phone"></i> Call
 							</a>
-							<a role="button" className="btn btn-info" href="http://www.skype.com">
+							<a role="button" className="btn btn-info">
 								<i className="fa fa-skype"></i> Skype
 							</a>
 							<a role="button" className="btn btn-success" href="mailto:confusion@food.net">
@@ -133,7 +75,6 @@ class Contact extends Component {
 						</div>
 					</div>
 				</div>
-
 				<div className="row row-content">
 					<div className="col-12">
 						<h3>Send us your Feedback</h3>
